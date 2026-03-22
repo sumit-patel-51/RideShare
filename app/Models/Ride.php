@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Booking;
 use App\Models\User;
+use App\Models\Rating;
 
 class Ride extends Model
 {
@@ -26,11 +27,14 @@ class Ride extends Model
         'license_number',
         'status',
     ];
-    public function user(){
+    public function user()
+    {
         return $this->belongsTo(User::class);
     }
 
-    public function bookings(){
+    public function bookings()
+    {
         return $this->hasMany(Booking::class);
     }
+
 }

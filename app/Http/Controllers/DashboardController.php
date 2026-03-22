@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Rating;
 use App\Models\Ride;
 use Illuminate\Http\Request;
 
@@ -21,7 +22,7 @@ class DashboardController extends Controller
         if ($request->date) {
             $query = $query->where('date', $request->date);
         }
-
+        
         $rides = $query->latest()->get();
         return view('dashboard', compact('rides'));
     }

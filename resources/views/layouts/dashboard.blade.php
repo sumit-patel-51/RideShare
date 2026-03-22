@@ -15,11 +15,15 @@
             overflow-x: hidden;
         }
 
-        /* --- Navbar Upgrade --- */
+        /* --- Navbar --- */
         .navbar {
             background-color: #ffffff !important;
             border-bottom: 2px solid #000000;
             padding: 15px 0;
+            width: 100%;
+            z-index: 100000;
+            position: sticky;
+            top: 0;
         }
 
         .navbar-brand {
@@ -32,7 +36,7 @@
             color: #FF9F43;
         }
 
-        /* --- Sidebar Upgrade --- */
+        /* --- Sidebar --- */
         .sidebar {
             min-height: 100vh;
             background-color: #ffffff;
@@ -42,7 +46,7 @@
 
         .nav-link {
             font-weight: 700;
-            color: #000000 !important;
+            color: #000000;
             padding: 12px 20px;
             border-radius: 12px;
             margin-bottom: 5px;
@@ -135,16 +139,35 @@
 </head>
 
 <body>
+    <div id="flash-container"
+        style="position: fixed; top: 10%; left: 50%; transform: translate(-50%, -50%); z-index: 100001; width: 90%; max-width: 400px;">
+        @if(session('success'))
+            <div class="alert-pop"
+                style="background-color: #FF9F43; border: 3px solid #000; padding: 20px; box-shadow: 8px 8px 0px 0px rgba(0,0,0,1); border-radius: 0; text-align: center;">
+                <h4 style="font-weight: 900; text-transform: uppercase; margin-bottom: 5px;">Success!</h4>
+                <p style="font-weight: 700; margin: 0;">{{ session('success') }}</p>
+            </div>
+        @endif
 
+        @if(session('error') || $errors->any())
+            <div class="alert-pop"
+                style="background-color: #ff4343; border: 3px solid #000; padding: 20px; box-shadow: 8px 8px 0px 0px rgba(0,0,0,1); border-radius: 0; text-align: center;">
+                <h4 style="font-weight: 900; text-transform: uppercase; margin-bottom: 5px; color: #fff;">Error</h4>
+                <p style="font-weight: 700; margin: 0; color: #fff;">
+                    {{ session('error') ?? $errors->first() }}
+                </p>
+            </div>
+        @endif
+    </div>
+    <!--  -->
     <div class="overlay" id="overlay" onclick="closeSidebar()"></div>
-
     <nav class="navbar navbar-expand-lg">
         <div class="container-fluid px-4">
             <button class="btn d-lg-none me-2 border-2 border-dark" onclick="toggleSidebar()">
                 <span class="fw-bold">☰</span>
             </button>
 
-            <a class="navbar-brand fs-3" href="#">RIDE<span class="orange-dot">.</span>SHARE</a>
+            <a class="navbar-brand fs-3" href="/dashboard">RIDE<span class="orange-dot">.</span>SHARE</a>
 
             <div class="ms-auto">
                 <a href="/rides/create" class="btn btn-post text-uppercase small">Post Ride</a>
@@ -160,7 +183,11 @@
                         class="rounded-circle mb-3 profile-img" width="80" height="80">
                     <h6 class="fw-black mb-0">{{ auth()->user()->name }}</h6>
                     <small class="text-muted fw-bold" style="font-size: 10px; text-transform: uppercase;">Verified
-                        Member</small>
+                        Member</small><br>
+                    @php
+                        $avgRating = App\Models\Rating::where('given_to', auth()->id())->avg('rating');
+                    @endphp
+                    <span class="text-muted small">⭐ {{ round($avgRating, 1) ?? 'N/A' }} Rating</span>
                 </div>
 
                 <ul class="nav flex-column px-2">
@@ -193,6 +220,18 @@
     </div>
 
     <script>
+        window.onload = function () {
+            const flash = document.getElementById('flash-container');
+            if (flash && flash.children.length > 0) {
+                // Wait 2 seconds, then fade out
+                setTimeout(() => {
+                    flash.style.transition = "all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)";
+                    flash.style.opacity = "0";
+                    flash.style.transform = "translate(-50%, -70%) scale(0.8)"; // Shrink and move up
+                    setTimeout(() => flash.remove(), 400);
+                }, 2000);
+            }
+        };
         function toggleSidebar() {
             document.getElementById('sidebar').classList.toggle('active');
             document.getElementById('overlay').classList.toggle('active');

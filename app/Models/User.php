@@ -54,4 +54,9 @@ class User extends Authenticatable
     public function bookings(){
         return $this->hasMany(Booking::class);
     }
+
+    public function ratingsGiven()
+    {
+        return $this->hasMany(Rating::class, 'given_by');
+    }
 }

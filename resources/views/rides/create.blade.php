@@ -78,7 +78,7 @@
                     <input type="time" name="time" class="form-control" required>
                 </div>
                 <div class="col-md-3 mb-3">
-                    <label class="form-label">Price ($)</label>
+                    <label class="form-label">Price (₹)</label>
                     <input type="number" name="price" class="form-control" placeholder="0.00" required>
                 </div>
                 <div class="col-md-3 mb-3">
