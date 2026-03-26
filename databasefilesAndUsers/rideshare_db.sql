@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3307
--- Generation Time: Feb 28, 2026 at 04:05 AM
+-- Generation Time: Mar 22, 2026 at 09:36 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -32,7 +32,7 @@ CREATE TABLE `bookings` (
   `ride_id` bigint(20) UNSIGNED NOT NULL,
   `user_id` bigint(20) UNSIGNED NOT NULL,
   `seats_booked` int(11) NOT NULL DEFAULT 1,
-  `status` enum('Confirmed','Cancelled') NOT NULL DEFAULT 'Confirmed',
+  `status` enum('Confirmed','Cancelled','Completed') NOT NULL DEFAULT 'Confirmed',
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -42,12 +42,24 @@ CREATE TABLE `bookings` (
 --
 
 INSERT INTO `bookings` (`id`, `ride_id`, `user_id`, `seats_booked`, `status`, `created_at`, `updated_at`) VALUES
-(8, 3, 2, 1, 'Cancelled', '2026-02-26 07:41:13', '2026-02-26 07:42:58'),
-(9, 3, 2, 1, 'Cancelled', '2026-02-26 07:43:24', '2026-02-26 07:43:39'),
-(10, 3, 2, 1, 'Cancelled', '2026-02-26 07:43:26', '2026-02-26 07:43:42'),
-(11, 3, 2, 1, 'Cancelled', '2026-02-26 07:43:28', '2026-02-26 07:43:45'),
-(12, 3, 2, 1, 'Cancelled', '2026-02-26 07:43:29', '2026-02-26 07:43:47'),
-(14, 3, 2, 1, 'Cancelled', '2026-02-26 08:25:03', '2026-02-26 09:28:59');
+(25, 14, 4, 1, 'Completed', '2026-03-21 22:17:02', '2026-03-21 22:19:52'),
+(26, 13, 4, 1, 'Completed', '2026-03-21 22:17:04', '2026-03-21 22:40:24'),
+(27, 14, 2, 1, 'Completed', '2026-03-21 22:18:36', '2026-03-21 22:19:52'),
+(28, 13, 2, 1, 'Completed', '2026-03-21 22:18:37', '2026-03-21 22:40:24'),
+(29, 15, 4, 1, 'Cancelled', '2026-03-21 23:15:22', '2026-03-21 23:15:34'),
+(30, 15, 4, 1, 'Cancelled', '2026-03-21 23:23:07', '2026-03-21 23:23:35'),
+(31, 15, 4, 1, 'Cancelled', '2026-03-21 23:24:28', '2026-03-21 23:32:05'),
+(32, 15, 4, 1, 'Cancelled', '2026-03-21 23:30:51', '2026-03-21 23:31:16'),
+(33, 15, 4, 1, 'Cancelled', '2026-03-21 23:32:18', '2026-03-21 23:34:05'),
+(34, 15, 4, 1, 'Cancelled', '2026-03-21 23:32:20', '2026-03-21 23:34:34'),
+(35, 15, 4, 1, 'Cancelled', '2026-03-21 23:32:22', '2026-03-21 23:33:46'),
+(36, 15, 4, 1, 'Cancelled', '2026-03-21 23:35:26', '2026-03-21 23:35:46'),
+(37, 15, 5, 1, 'Cancelled', '2026-03-21 23:37:49', '2026-03-21 23:40:55'),
+(38, 15, 5, 1, 'Cancelled', '2026-03-21 23:38:27', '2026-03-21 23:40:24'),
+(39, 18, 2, 1, 'Confirmed', '2026-03-21 23:44:41', '2026-03-21 23:44:41'),
+(40, 18, 4, 1, 'Cancelled', '2026-03-22 01:56:43', '2026-03-22 02:07:28'),
+(41, 15, 4, 1, 'Cancelled', '2026-03-22 01:56:48', '2026-03-22 02:07:17'),
+(42, 18, 4, 1, 'Cancelled', '2026-03-22 02:08:57', '2026-03-22 02:11:27');
 
 -- --------------------------------------------------------
 
@@ -146,7 +158,8 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 (3, '0001_01_01_000002_create_jobs_table', 1),
 (4, '2026_02_23_124502_add_phone_to_users_table', 2),
 (5, '2026_02_23_133321_create_rides_table', 3),
-(6, '2026_02_24_132121_create_bookings_table', 4);
+(6, '2026_02_24_132121_create_bookings_table', 4),
+(7, '2026_03_18_112357_create_ratings_table', 5);
 
 -- --------------------------------------------------------
 
@@ -159,6 +172,32 @@ CREATE TABLE `password_reset_tokens` (
   `token` varchar(255) NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `ratings`
+--
+
+CREATE TABLE `ratings` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `ride_id` bigint(20) UNSIGNED NOT NULL,
+  `given_by` bigint(20) UNSIGNED NOT NULL,
+  `given_to` bigint(20) UNSIGNED NOT NULL,
+  `rating` int(11) NOT NULL,
+  `review` varchar(11) DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `ratings`
+--
+
+INSERT INTO `ratings` (`id`, `ride_id`, `given_by`, `given_to`, `rating`, `review`, `created_at`, `updated_at`) VALUES
+(2, 14, 2, 3, 4, NULL, '2026-03-21 22:29:36', '2026-03-21 22:29:36'),
+(3, 13, 2, 3, 5, 'Good', '2026-03-21 22:42:11', '2026-03-21 22:42:11'),
+(4, 13, 4, 3, 5, 'marvelas', '2026-03-21 22:44:20', '2026-03-21 22:44:20');
 
 -- --------------------------------------------------------
 
@@ -193,8 +232,16 @@ CREATE TABLE `rides` (
 --
 
 INSERT INTO `rides` (`id`, `user_id`, `pickup_address`, `pickup_lat`, `pickup_lng`, `drop_address`, `drop_lat`, `drop_lng`, `distance_kg`, `date`, `time`, `price`, `total_seats`, `available_seats`, `vehicle_number`, `license_number`, `status`, `created_at`, `updated_at`) VALUES
-(3, 4, 'ahmedabad', 0, 0, 'gandhinagar', 0, 0, 0, '2026-02-27', '09:10:00', 500.00, 4, 3, 'GJ04FC6877', 'SS51P5251', 'Cancelled', '2026-02-26 07:33:25', '2026-02-26 09:28:59'),
-(5, 4, 'Bhavnagar', 0, 0, 'Surat', 0, 0, 0, '2026-03-01', '04:34:00', 400.00, 6, 6, 'GJ04FC6877', 'SS51P5251', 'Cancelled', '2026-02-26 08:35:08', '2026-02-26 08:46:25');
+(11, 2, 'Bhavnagar', 0, 0, 'gandhinagar', 0, 0, 0, '2026-03-19', '08:01:00', 500.00, 5, 5, 'GJ04FC6877', 'SS51P5251', 'Completed', '2026-03-18 09:01:44', '2026-03-18 09:01:48'),
+(12, 3, 'Bhavnagar', 0, 0, 'gandhinagar', 0, 0, 0, '2026-03-20', '20:06:00', 1500.00, 5, 5, 'GJ04FC6874', 'SS51P5251', 'Completed', '2026-03-18 09:04:42', '2026-03-21 22:13:25'),
+(13, 3, 'Bhavnagar', 0, 0, 'Rajkot', 0, 0, 0, '2026-03-23', '09:18:00', 550.00, 4, 2, 'GJ04FC6877', 'SS51P5251', 'Completed', '2026-03-21 22:15:28', '2026-03-21 22:40:24'),
+(14, 3, 'ahmedabad', 0, 0, 'Surat', 0, 0, 0, '2026-03-24', '09:18:00', 450.00, 3, 2, 'GJ04FC6877', 'SS51P5251', 'Completed', '2026-03-21 22:16:00', '2026-03-21 22:19:52'),
+(15, 2, 'Bhavnagar', 0, 0, 'gandhinagar', 0, 0, 0, '2026-03-23', '10:16:00', 54.00, 5, 5, 'GJ04FC6877', 'SS51P5252', 'Upcoming', '2026-03-21 23:15:01', '2026-03-22 02:07:17'),
+(16, 4, 'Bhavnagar', 0, 0, 'Rajkot', 0, 0, 0, '2026-04-02', '10:36:00', 450.00, 5, 5, 'GJ04FC6877', 'SS51P5252', 'Completed', '2026-03-21 23:33:01', '2026-03-21 23:34:16'),
+(17, 5, 'Surat', 0, 0, 'Bhavnagar', 0, 0, 0, '2026-03-23', '10:42:00', 1200.00, 5, 5, 'GJ04FC6877', 'SS51P5250', 'Cancelled', '2026-03-21 23:39:00', '2026-03-21 23:40:10'),
+(18, 5, 'ahmedabad', 0, 0, 'Rajkot', 0, 0, 0, '2026-04-01', '10:43:00', 1200.00, 5, 4, 'GJ04FC6877', 'ssp5251Sd', 'Upcoming', '2026-03-21 23:43:58', '2026-03-22 02:11:27'),
+(19, 3, 'Bhavnagar', 0, 0, 'Ahemdabad', 0, 0, 0, '2026-03-24', '13:17:00', 553.00, 6, 6, 'GJ04FC6877', 'SS51P5251', 'Completed', '2026-03-22 02:13:36', '2026-03-22 02:23:08'),
+(20, 3, 'ahmedabad', 0, 0, 'gandhinagar', 0, 0, 0, '2026-03-24', '13:28:00', 4500.00, 5, 5, 'GJ04FC6874', 'ssp5251Sd', 'Cancelled', '2026-03-22 02:24:50', '2026-03-22 02:25:14');
 
 -- --------------------------------------------------------
 
@@ -216,7 +263,7 @@ CREATE TABLE `sessions` (
 --
 
 INSERT INTO `sessions` (`id`, `user_id`, `ip_address`, `user_agent`, `payload`, `last_activity`) VALUES
-('b5XMOAbdmhEU4f6otdknn4PrEFhzUmiFfZehNVRg', 4, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36', 'YTo0OntzOjY6Il90b2tlbiI7czo0MDoia0VaUEJvd2Jhb2RMRWFIVHZsdVNuMVJsTlEwVlAxa1piblZjelUyYiI7czo5OiJfcHJldmlvdXMiO2E6Mjp7czozOiJ1cmwiO3M6MzQ6Imh0dHA6Ly8xMjcuMC4wLjE6ODAwMC9yaWRlcy9jcmVhdGUiO3M6NToicm91dGUiO3M6MTI6InJpZGVzLmNyZWF0ZSI7fXM6NjoiX2ZsYXNoIjthOjI6e3M6Mzoib2xkIjthOjA6e31zOjM6Im5ldyI7YTowOnt9fXM6NTA6ImxvZ2luX3dlYl81OWJhMzZhZGRjMmIyZjk0MDE1ODBmMDE0YzdmNThlYTRlMzA5ODlkIjtpOjQ7fQ==', 1772117947);
+('JAo9BsYVSvnv6S39mbu0yRbhaDsCvncw2XSqnB6g', 4, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36', 'YTo1OntzOjY6Il90b2tlbiI7czo0MDoiWFhybEluNDVETjY2ZzBiT01FSUdSNnNHekxTa3Y4OVltMGRzWGlQRyI7czo2OiJfZmxhc2giO2E6Mjp7czozOiJvbGQiO2E6MDp7fXM6MzoibmV3IjthOjA6e319czo5OiJfcHJldmlvdXMiO2E6Mjp7czozOiJ1cmwiO3M6MzE6Imh0dHA6Ly8xMjcuMC4wLjE6ODAwMC9wcm9maWxlLzMiO3M6NToicm91dGUiO3M6MTI6InByb2ZpbGUuc2hvdyI7fXM6MzoidXJsIjthOjE6e3M6ODoiaW50ZW5kZWQiO3M6MzQ6Imh0dHA6Ly8xMjcuMC4wLjE6ODAwMC9yaWRlcy9jcmVhdGUiO31zOjUwOiJsb2dpbl93ZWJfNTliYTM2YWRkYzJiMmY5NDAxNTgwZjAxNGM3ZjU4ZWE0ZTMwOTg5ZCI7aTo0O30=', 1774166614);
 
 -- --------------------------------------------------------
 
@@ -244,7 +291,9 @@ INSERT INTO `users` (`id`, `name`, `email`, `email_verified_at`, `password`, `re
 (1, 'Sumit Patel', 'sumitpatel5251@gmail.com', NULL, '$2y$12$brjZLrlcQzRG.AyEgC/uKOOhHU0fpqWZPqelq3ci0NzXn5LP9xYkK', NULL, '2026-02-23 07:25:18', '2026-02-23 07:25:18', '07874984396'),
 (2, 'pavan', 'pavan@gmail.com', NULL, '$2y$12$JmY1PsjPvkGiOkAewBv96O6ch/8CVe2YZqV5U.ilA8pBpMbF5ejlG', NULL, '2026-02-23 07:41:42', '2026-02-23 07:41:42', '07874984396'),
 (3, 'manav', 'manav@gmail.com', NULL, '$2y$12$5jcQHLsiKYmGPiw7HasDYuLqNenkR8ophZBqiELGIOzriXKPhXYsm', NULL, '2026-02-23 07:42:59', '2026-02-23 07:42:59', '994966662'),
-(4, 'Mayur', 'mayur@gmail.com', NULL, '$2y$12$mR4e9DNh.XXhn4JTy0u7y.OMykMt2zMcQiPV4iMVzwBvcDG8C6zr6', NULL, '2026-02-23 07:43:59', '2026-02-23 07:43:59', '787949956');
+(4, 'Mayur', 'mayur@gmail.com', NULL, '$2y$12$mR4e9DNh.XXhn4JTy0u7y.OMykMt2zMcQiPV4iMVzwBvcDG8C6zr6', NULL, '2026-02-23 07:43:59', '2026-02-23 07:43:59', '787949956'),
+(5, 'jupin patel', 'jupin@gmail.com', NULL, '$2y$12$uXXuGpms8l7v41KYPIULo.y7T/q6pDywzFyAVSkatEJ2AZFByMUSa', NULL, '2026-03-21 23:37:23', '2026-03-21 23:37:23', '9537431675'),
+(6, 'Sumit Patel', 'sumit@gmail.com', NULL, '$2y$12$wH.AmuiSb0pPLTvkR4/T2.oNzouBhGNg3bod7EJTXZUDeKWSTgCWC', NULL, '2026-03-22 02:25:59', '2026-03-22 02:25:59', '+917874984396');
 
 --
 -- Indexes for dumped tables
@@ -305,6 +354,15 @@ ALTER TABLE `password_reset_tokens`
   ADD PRIMARY KEY (`email`);
 
 --
+-- Indexes for table `ratings`
+--
+ALTER TABLE `ratings`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `ratings_ride_id_foreign` (`ride_id`),
+  ADD KEY `ratings_given_by_foreign` (`given_by`),
+  ADD KEY `ratings_given_to_foreign` (`given_to`);
+
+--
 -- Indexes for table `rides`
 --
 ALTER TABLE `rides`
@@ -334,7 +392,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `bookings`
 --
 ALTER TABLE `bookings`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=43;
 
 --
 -- AUTO_INCREMENT for table `failed_jobs`
@@ -352,19 +410,25 @@ ALTER TABLE `jobs`
 -- AUTO_INCREMENT for table `migrations`
 --
 ALTER TABLE `migrations`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+
+--
+-- AUTO_INCREMENT for table `ratings`
+--
+ALTER TABLE `ratings`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `rides`
 --
 ALTER TABLE `rides`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
 
 --
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- Constraints for dumped tables
@@ -376,6 +440,14 @@ ALTER TABLE `users`
 ALTER TABLE `bookings`
   ADD CONSTRAINT `bookings_ride_id_foreign` FOREIGN KEY (`ride_id`) REFERENCES `rides` (`id`) ON DELETE CASCADE,
   ADD CONSTRAINT `bookings_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE;
+
+--
+-- Constraints for table `ratings`
+--
+ALTER TABLE `ratings`
+  ADD CONSTRAINT `ratings_given_by_foreign` FOREIGN KEY (`given_by`) REFERENCES `users` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `ratings_given_to_foreign` FOREIGN KEY (`given_to`) REFERENCES `users` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `ratings_ride_id_foreign` FOREIGN KEY (`ride_id`) REFERENCES `rides` (`id`) ON DELETE CASCADE;
 
 --
 -- Constraints for table `rides`
