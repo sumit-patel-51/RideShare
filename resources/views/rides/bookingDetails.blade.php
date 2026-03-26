@@ -59,7 +59,6 @@
             font-weight: 700;
         }
     </style>
-
     <div class="container py-4">
         <div class="d-flex align-items-center mb-4">
             <a href="{{ route('rides.bookings') }}" class="btn btn-outline-dark rounded-circle me-3"
@@ -103,12 +102,20 @@
                     <div class="col-md-8">
                         <h5 class="fw-black mb-3">Driver Details</h5>
                         <div class="d-flex align-items-center">
-                            <div class="rounded-circle bg-dark text-white d-flex align-items-center justify-content-center me-3"
-                                style="width: 50px; height: 50px; border: 2px solid #FF9F43;">
-                                {{ substr($booking->ride->user->name, 0, 1) }}
-                            </div>
+
+                            @if ($booking->ride->user->image)
+                                <img src="{{ asset('userImages/' . $booking->ride->user->image) }}"
+                                    class="rounded-circle border border-3 border-dark me-3"
+                                    style="width: 50px; height: 50px; object-fit: cover;">
+                            @else
+                                <div class="rounded-circle bg-dark text-white d-flex align-items-center justify-content-center me-3"
+                                    style="width: 50px; height: 50px; border: 2px solid #FF9F43;">
+                                    {{ substr($booking->ride->user->name, 0, 1) }}
+                                </div>
+                            @endif
                             <div>
-                                <a href="{{ route('profile.show', $booking->ride->user->id) }}" class="fw-bold text-black d-block">{{ $booking->ride->user->name }}</a>
+                                <a href="{{ route('profile.show', $booking->ride->user->id) }}"
+                                    class="fw-bold text-black d-block">{{ $booking->ride->user->name }}</a>
                                 <span class="text-muted small">⭐ {{ round($avgRating, 1) ?? 'N/A' }} Rating</span>
                             </div>
                         </div>

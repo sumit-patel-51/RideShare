@@ -19,8 +19,12 @@ Route::post('/register', [AuthController::class, 'saveRegister']);
 
 Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
 Route::post('/login', [AuthController::class, 'saveLogin']);
-Route::get('/logout', [AuthController::class, 'logout']);
 Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth');
+
+//profile page
+Route::get('/profile',[ProfileController::class, 'userProfile'])->middleware('auth')->name('profile');
+Route::get('/showEdit',[ProfileController::class, 'showEdit'])->middleware('auth')->name('showEdit');
+Route::put('/updateProfile/{id}',[ProfileController::class, 'update'])->middleware('auth')->name('updateProfile');
 
 
 //dashboard

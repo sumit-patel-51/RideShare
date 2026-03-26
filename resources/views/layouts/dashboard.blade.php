@@ -179,9 +179,19 @@
         <div class="row">
             <div class="col-lg-3 col-xl-2 sidebar" id="sidebar">
                 <div class="text-center mb-5">
-                    <img src="https://api.dicebear.com/9.x/notionists/svg?seed={{ auth()->user()->name }}"
-                        class="rounded-circle mb-3 profile-img" width="80" height="80">
-                    <h6 class="fw-black mb-0">{{ auth()->user()->name }}</h6>
+                    <a href="{{ url('profile') }}" class="text-black text-decoration-none">
+                        @if (auth()->user()->image)
+                            <img src="{{ asset('userImages/' . auth()->user()->image) }}"
+                                class="rounded-circle border border-3 border-dark mb-3"
+                                style="width: 80px; height: 80px; object-fit: cover;">
+                        @else
+                            <div class="rounded-circle border bottom-3 border-dark d-flex align-items-center justify-content-center bg-light shadow-sm mx-auto"
+                                style="width: 80px; height: 80px; background-color: #FF9F43 !important;">
+                                <span class="fw-black display-6">{{ substr(auth()->user()->name, 0, 1) }}</span>
+                            </div>
+                        @endif
+                        <h6 class="fw-black mb-0">{{ auth()->user()->name }}</h6>
+                    </a>
                     <small class="text-muted fw-bold" style="font-size: 10px; text-transform: uppercase;">Verified
                         Member</small><br>
                     @php

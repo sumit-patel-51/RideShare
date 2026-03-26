@@ -153,9 +153,9 @@
                     </div>
                 </div>
                 <div class="col-lg-6 d-none d-lg-block text-center">
-                    <div
+                    <div class=" overflow-hidden"
                         style="width: 100%; height: 400px; border: 4px solid #000; border-radius: 40px; background: #FF9F43; display: flex; align-items: center; justify-content: center; box-shadow: 20px 20px 0px 0px rgba(0,0,0,0.05);">
-                        <span style="font-size: 150px;">🚗</span>
+                        <img src="{{ asset('images/logo1.png')}}" style="width: 100%; height: 100%; object-fit: fill;" alt="">
                     </div>
                 </div>
             </div>

@@ -53,7 +53,7 @@ class RideController extends Controller
     //myRide page
     public function myRides()
     {
-        $rides = auth()->user()->rides()->latest()->get();
+        $rides = auth()->user()->rides()->get();
         return view('rides.my', compact('rides'));
     }
 
@@ -64,8 +64,7 @@ class RideController extends Controller
             return back()->with('error', 'Unauthorized access');
         }
 
-        $booking = $ride->bookings()->get();
-        $bookings = $booking->where("status", 'Confirmed');
+        $bookings = $ride->bookings()->where("status", 'Confirmed')->get();
         return view('rides.passengers', compact('ride', 'bookings'));
     }
 
@@ -88,12 +87,12 @@ class RideController extends Controller
             'total_seats' => 'required|integer|min:1',
         ]);
 
-        $boockedSeats = $ride->total_seats - $ride->available_seats;
-        if ($req->total_seats < $boockedSeats) {
+        $bookedSeats = $ride->total_seats - $ride->available_seats;
+        if ($req->total_seats < $bookedSeats) {
             return back()->with('error', 'Cannot reduce seats below already booked seats.');
         }
 
-        $ride->available_seats = $req->total_seats - $boockedSeats;
+        $ride->available_seats = $req->total_seats - $bookedSeats;
 
         $ride->update([
             'date' => $req->date,
@@ -115,14 +114,13 @@ class RideController extends Controller
 
         $ride->update(['status' => "Cancelled"]);
 
-        foreach ($ride->bookings as $booking) {
+        foreach ($ride->bookings as $booking)
             $booking->update(["status" => "Cancelled"]);
-        }
 
         return back()->with("success", "Ride Cancelled Successfully!");
     }
 
-    //comple ride
+    //complete ride
     public function completeRide(Ride $ride)
     {
         if ($ride->user_id != auth()->id())
@@ -143,6 +141,12 @@ class RideController extends Controller
         if ($ride->user_id == auth()->id()) {
             return back()->with('error', "You Can't Book Your Own Ride.");
         }
+
+        //already booked user not book again
+        $alreadyBooked = Booking::where('ride_id', $ride->id)->where('status', 'Confirmed')->where('user_id', auth()->id())->exists();
+        if ($alreadyBooked)
+            return back()->with('error', 'You already booked this ride.');
+
         //check available seats
         if ($ride->available_seats < 1) {
             return back()->with("error", "No seats Available.");
@@ -151,7 +155,7 @@ class RideController extends Controller
         Booking::create([
             'ride_id' => $ride->id,
             'user_id' => auth()->id(),
-            'seat_booked' => 1,
+            'seats_booked' => 1,
             'status' => 'Confirmed'
         ]);
 
@@ -177,8 +181,8 @@ class RideController extends Controller
 
         $avgRating = Rating::where('given_to', $driverId)->avg('rating');
 
-        $alreadyRated = Rating::where("ride_id", $booking->ride->id)->where('given_by', auth()->id())->exists();
-        
+        $alreadyRated = Rating::where("given_to", $driverId)->where('given_by', auth()->id())->exists();
+
         return view('rides.bookingDetails', compact('booking', 'alreadyRated', 'avgRating'));
     }
 
@@ -189,13 +193,13 @@ class RideController extends Controller
             return back()->with('error', 'Unauthorize action.');
         }
 
-        if ($booking->statuc == 'Cancelled') {
+        if ($booking->status == 'Cancelled') {
             return back()->with('error', 'Booking Already Cancelled.');
         }
 
         $booking->update(['status' => 'Cancelled']);
 
-        $booking->ride()->increment('available_seats');
+        $booking->ride->increment('available_seats');
 
         return back()->with('success', 'Booking cancelled Successfullt!');
     }

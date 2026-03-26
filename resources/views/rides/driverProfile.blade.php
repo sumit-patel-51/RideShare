@@ -5,10 +5,17 @@
         <div class="card border-2 border-dark rounded-4 shadow-sm mb-4 bg-white">
             <div class="card-body p-4 p-md-5">
                 <div class="d-flex align-items-center flex-wrap">
-                    <div class="rounded-circle border border-3 border-dark d-flex align-items-center justify-content-center bg-light shadow-sm mb-3 mb-md-0"
-                        style="width: 100px; height: 100px; background-color: #FF9F43 !important;">
-                        <span class="fw-black display-4">{{ substr($user->name, 0, 1) }}</span>
-                    </div>
+
+                    @if ($user->image)
+                        <img src="{{ asset('userImages/' . $user->image) }}"
+                            class="rounded-circle border border-3 border-dark mb-3"
+                            style="width: 100px; height: 100px; object-fit: cover;">
+                    @else
+                        <div class="rounded-circle border border-3 border-dark d-flex align-items-center justify-content-center bg-light shadow-sm mb-3 mb-md-0"
+                            style="width: 100px; height: 100px; background-color: #FF9F43 !important;">
+                            <span class="fw-black display-4">{{ substr($user->name, 0, 1) }}</span>
+                        </div>
+                    @endif
 
                     <div class="ms-md-4 flex-grow-1">
                         <h2 class="fw-black mb-1">{{ $user->name }}</h2>
@@ -40,12 +47,16 @@
                             <div class="d-flex align-items-center justify-content-between mb-3 flex-wrap gap-2">
 
                                 <div class="d-flex align-items-center gap-3">
-
-                                    <div class="rounded-circle border border-dark d-flex align-items-center justify-content-center bg-light shadow-sm"
-                                        style="width: 45px; height: 45px; background-color: #FF9F43 !important;">
-                                        <span class="fw-black h6 mb-0">{{ substr($revs->giver->name, 0, 1) }}</span>
-                                    </div>
-
+                                    @if ($revs->giver->image)
+                                        <img src="{{ asset('userImages/' . $revs->giver->image) }}"
+                                            class="rounded-circle border border-3 border-dark mb-3"
+                                            style="width:50px; height: 50px; object-fit: cover;">
+                                    @else
+                                        <div class="rounded-circle border border-dark d-flex align-items-center justify-content-center bg-light shadow-sm"
+                                            style="width: 45px; height: 45px; background-color: #FF9F43 !important;">
+                                            <span class="fw-black h6 mb-0">{{ substr($revs->giver->name, 0, 1) }}</span>
+                                        </div>
+                                    @endif
                                     <div>
                                         <p class="fw-black mb-0 text-dark">{{ $revs->giver->name }}</p>
                                         <div class="text-warning small mb-0">

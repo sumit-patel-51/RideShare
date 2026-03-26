@@ -12,7 +12,7 @@ class RatingController extends Controller
     public function store(Request $req, $rideId)
     {
         $req->validate([
-            'rating' => 'required|min:1|max:5',
+            'rating' => 'required|integer|min:1|max:5',
             'review' => 'nullable|string'
         ]);
 
@@ -44,8 +44,8 @@ class RatingController extends Controller
     public function profileShow($id)
     {
         $user = User::findOrFail($id);
-        $avgRating = Rating::findOrFail($id)->avg('rating');
-        $totalRatings = Rating::findOrFail($id)->count();
+        $avgRating = Rating::where('given_to',$id)->avg('rating');
+        $totalRatings = Rating::where('given_to',$id)->count();
         $rev = Rating::where('given_to',$id)->get();
         return view('rides.driverProfile', compact('user', 'avgRating', 'totalRatings', 'rev'));
     }

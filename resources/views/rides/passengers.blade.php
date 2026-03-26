@@ -21,10 +21,16 @@
                             <div class="card-body p-4">
                                 <div class="d-flex align-items-center">
                                     <div class="flex-shrink-0 me-3">
-                                        <div class="rounded-circle border border-dark d-flex align-items-center justify-content-center bg-light"
-                                            style="width: 60px; height: 60px; background-color: #FF9F43 !important;">
-                                            <span class="fw-black fs-4">{{ substr($booking->user->name, 0, 1) }}</span>
-                                        </div>
+                                        @if ($booking->user->image)
+                                            <img src="{{ asset('userImages/' . $booking->user->image) }}"
+                                                class="rounded-circle border border-3 border-dark mb-3"
+                                                style="width: 60px; height: 60px; object-fit: cover;">
+                                        @else
+                                            <div class="rounded-circle border border-dark d-flex align-items-center justify-content-center bg-light"
+                                                style="width: 60px; height: 60px; background-color: #FF9F43 !important;">
+                                                <span class="fw-black fs-4">{{ substr($booking->user->name, 0, 1) }}</span>
+                                            </div>
+                                        @endif
                                     </div>
 
                                     <div class="flex-grow-1">
