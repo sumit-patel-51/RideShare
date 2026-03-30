@@ -6,10 +6,17 @@
     <div class="container py-4">
         <div class="d-flex justify-content-between align-items-center mb-4">
             <h3 class="fw-black m-0">My Profile</h3>
-            <a href="{{ route('showEdit') }}" class="btn btn-dark fw-bold px-4 rounded-pill shadow-sm"
-                style="background-color: #FF9F43; border: 2px solid #000; color: black;">
-                Edit Profile
-            </a>
+            <div>
+
+                <a href="{{ route('showEdit') }}" class="btn btn-dark fw-bold px-4 rounded-pill shadow-sm"
+                    style="background-color: #FF9F43; border: 2px solid #000; color: black;">
+                    Edit Profile
+                </a>
+                <a href="{{ route('showChangePass') }}" class="btn btn-dark fw-bold px-4 rounded-pill shadow-sm"
+                    style="background-color: #FF9F43; border: 2px solid #000; color: black;">
+                    Change Password
+                </a>
+            </div>
         </div>
 
         <div class="card border-2 border-dark rounded-4 shadow-sm bg-white overflow-hidden mb-5">

@@ -16,7 +16,7 @@ return new class extends Migration
             $table->foreignId('ride_id')->constrained()-> onDelete('cascade');
             $table->foreignId('user_id')->constrained()-> onDelete('cascade');
             $table->integer('seats_booked')->default(1);
-            $table->enum('status', ['Confirmed', 'Cancelled'])->default('Confirmed');
+            $table->enum('status', ['Confirmed', 'Cancelled', 'Ongoing', 'Completed'])->default('Confirmed');
             $table->timestamps();
         });
     }

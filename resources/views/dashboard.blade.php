@@ -71,20 +71,17 @@
                                     <div class="flex-grow-1">
                                         <small class="text-muted d-block fw-bold text-uppercase"
                                             style="font-size: 10px;">Driver</small>
-                                        <span class="fw-bold text-dark">{{ $ride->user->name }}</span>
+                                        <span href="" class="fw-bold text-dark">{{ $ride->user->name }}</span>
                                     </div>
                                     <div class="text-end">
                                         <span class="badge bg-dark rounded-pill">{{ $ride->available_seats }} Seats Left</span>
                                     </div>
                                 </div>
-
-                                <form action="{{ route('rides.book', $ride->id) }}" method="POST">
-                                    @csrf
-                                    <button class="btn w-100 fw-black py-2 rounded-3 text-uppercase"
-                                        style="background-color: #FF9F43; border: 2px solid #000; color: #000;">
-                                        Book This Ride
-                                    </button>
-                                </form>
+                                <a href="{{ route('rides.detailShow', $ride->id) }}"
+                                    class="btn w-100 fw-black py-2 rounded-3 text-uppercase"
+                                    style="background-color: #FF9F43; border: 2px solid #000; color: #000;">
+                                    View Details & Book
+                                </a>
                             </div>
                         </div>
                     </div>

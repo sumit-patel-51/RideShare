@@ -13,10 +13,10 @@
             </a>
         </div>
 
-        @if($rides->where('status', 'Upcoming')->count() > 0)
+        @if($rides->where('status', 'Upcoming')->count() > 0 || $rides->where('status', 'Ongoing')->count() > 0)
             <div class="row g-4">
                 @foreach($rides as $ride)
-                    @if($ride->status == 'Upcoming')
+                    @if($ride->status == 'Upcoming' || $ride->status == 'Ongoing')
                         <div class="col-12">
                             <div class="card border-2 border-dark rounded-4 shadow-sm overflow-hidden">
                                 <div class="card-body p-0">
@@ -53,23 +53,32 @@
 
                                             <div class="d-flex gap-2 mb-2">
                                                 <a href="{{ route('ride.edit', $ride->id) }}"
-                                                    class="btn btn-sm btn-dark flex-grow-1 fw-bold py-2">Edit</a>
+                                                    class="btn btn-sm btn-dark w-50 fw-bold py-2">Edit</a>
 
-                                                <form action="{{ route('ride.cancelRide', $ride) }}" method="post" class="flex-grow-1">
+                                                <form action="{{ route('ride.cancelRide', $ride) }}" method="post" class="w-50">
                                                     @csrf
                                                     <button type="submit"
                                                         class="btn btn-sm btn-danger w-100 fw-bold py-2">Cancel</button>
                                                 </form>
                                             </div>
-
-                                            <form action="{{ route('ride.completed', $ride) }}" method="post" class="w-100">
-                                                @method('PUT')
-                                                @csrf
-                                                <button type="submit"
-                                                    class="btn btn-sm btn-success w-100 fw-black py-2 text-uppercase shadow-sm">
-                                                    Complete
-                                                </button>
-                                            </form>
+                                            <div class="d-flex gap-2 mb-2">
+                                                <form action="{{ route('ride.ongoing', $ride) }}" method="post" class="w-50">
+                                                    @method('PUT')
+                                                    @csrf
+                                                    <button type="submit"
+                                                        class="btn btn-sm btn-primary w-100 fw-black py-2 text-uppercase shadow-sm">
+                                                        Ongoing
+                                                    </button>
+                                                </form>
+                                                <form action="{{ route('ride.completed', $ride) }}" method="post" class="w-50">
+                                                    @method('PUT')
+                                                    @csrf
+                                                    <button type="submit"
+                                                        class="btn btn-sm btn-success w-100 fw-black py-2 text-uppercase shadow-sm">
+                                                        Complete
+                                                    </button>
+                                                </form>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -95,7 +104,7 @@
         @if($rides->count() > 0)
             <div class="row g-4">
                 @foreach($rides as $ride)
-                    @if($ride->status != 'Upcoming')
+                    @if($ride->status != 'Upcoming' && $ride->status != 'Ongoing')
                         <div class="col-12">
                             <div class="card border-2 border-dark rounded-4 shadow-sm overflow-hidden">
                                 <div class="card-body p-0">
@@ -133,6 +142,10 @@
                                     </div>
                                 </div>
                             </div>
+                        </div>
+                    @else
+                        <div class="text-center py-5 border border-dashed rounded-5 mt-4">
+                            <h5 class="text-secondary fw-bold">No Ride History</h5>
                         </div>
                     @endif
                 @endforeach

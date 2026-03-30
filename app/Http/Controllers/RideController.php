@@ -12,7 +12,8 @@ class RideController extends Controller
     //post ride page
     public function create()
     {
-        return view("rides.create");
+        $user = auth()->user();
+        return view("rides.create", compact('user'));
     }
 
     //store ride
@@ -47,6 +48,14 @@ class RideController extends Controller
             "license_number" => $request->license_number,
             "status" => 'Upcoming',
         ]);
+
+        //if user license and vehicle no not exist
+        $user = auth()->user();
+        if (!$user->license_no || !$user->vehicle_no) {
+            $user->license_no = $request->license_number;
+            $user->vehicle_no = $request->vehicle_number;
+            $user->save();
+        }
         return redirect('/dashboard')->with('success', 'Ride Posted Successfully!');
     }
 
@@ -129,40 +138,72 @@ class RideController extends Controller
         $ride->update(['status' => 'Completed']);
 
         foreach ($ride->bookings as $booking) {
-            $booking->update(['status' => 'Completed']);
+            if ($booking->status == 'Confirmed' || $booking->status == 'Ongoing') {
+                $booking->update(['status' => 'Completed']);
+            }
         }
         return back()->with("success", "Ride Completed!");
     }
-
-    //book ride
-    public function book(Ride $ride)
+    //complete ride
+    public function ongoingRide(Ride $ride)
     {
-        // if own ride
+        if ($ride->user_id != auth()->id())
+            return back()->with('error', 'Unautharized');
+
+        $ride->update(['status' => 'Ongoing']);
+
+        foreach ($ride->bookings as $booking) {
+            if ($booking->status == 'Confirmed') {
+                $booking->update(['status' => 'Ongoing']);
+            }
+        }
+        return back()->with("success", "Ride is Ongoing!");
+    }
+
+    //show ride detail
+    public function rideDetailShow($id)
+    {
+        $ride = Ride::with('user')->findOrFail($id);
+        //if own ride
         if ($ride->user_id == auth()->id()) {
             return back()->with('error', "You Can't Book Your Own Ride.");
         }
-
+        $avgRating = Rating::where('given_to', $id)->avg('rating');
+        return view('rides.showDetail', compact('ride', 'avgRating'));
+    }
+    //book ride
+    public function book(Request $req, Ride $ride)
+    {
+        $req->validate([
+            'pickup_address' => 'required|string|max:255',
+            'drop_address' => 'required|string|max:255',
+            'seats_booked' => 'required|integer|min:1'
+        ]);
         //already booked user not book again
         $alreadyBooked = Booking::where('ride_id', $ride->id)->where('status', 'Confirmed')->where('user_id', auth()->id())->exists();
         if ($alreadyBooked)
             return back()->with('error', 'You already booked this ride.');
 
         //check available seats
-        if ($ride->available_seats < 1) {
-            return back()->with("error", "No seats Available.");
+        if ($ride->available_seats < $req->seats_booked) {
+            return back()->with("error", "Not enough seats Available.");
         }
+
+
         //create booking
         Booking::create([
             'ride_id' => $ride->id,
             'user_id' => auth()->id(),
-            'seats_booked' => 1,
+            'pickup_address' => $req->pickup_address,
+            'drop_address' => $req->drop_address,
+            'seats_booked' => $req->seats_booked,
             'status' => 'Confirmed'
         ]);
 
         //reduce available seats
-        $ride->decrement('available_seats');
+        $ride->decrement('available_seats', $req->seats_booked);
 
-        return back()->with('success', 'Ride Booked Successfully!');
+        return redirect('my-bookings')->with('success', 'Ride Booked Successfully!');
     }
 
     //my Boocking
@@ -199,7 +240,7 @@ class RideController extends Controller
 
         $booking->update(['status' => 'Cancelled']);
 
-        $booking->ride->increment('available_seats');
+        $booking->ride->increment('available_seats', $booking->seats_booked);
 
         return back()->with('success', 'Booking cancelled Successfullt!');
     }

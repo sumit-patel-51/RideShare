@@ -11,6 +11,8 @@ class Booking extends Model
         "user_id",
         "seats_booked",
         "status",
+        "pickup_address",
+        "drop_address",
     ];
 
     public function user()

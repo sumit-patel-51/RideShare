@@ -6,6 +6,7 @@ use App\Http\Requests\ProfileUpdateRequest;
 use App\Models\Rating;
 use App\Models\User;
 use File;
+use Hash;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -79,4 +80,37 @@ class ProfileController extends Controller
         return redirect('profile')->with('success', 'Profile Updated Successfully!');
     }
 
+    //Change Password page
+    public function showChangePassword()
+    {
+        return view('profile.showChangePass');
+    }
+
+    //save new Password
+    public function savePassword(Request $req)
+    {
+        $req->validate([
+            'current_password' => 'required|min:6',
+            'new_password' => 'required|min:6',
+            'confirm_password' => 'required|min:6',
+        ]);
+
+        if ($req->new_password != $req->confirm_password) {
+            return back()->with('errorpass', 'New password and confirm password do not match');
+        }
+
+        $user = auth()->user();
+
+        if (Hash::check($req->confirm_password, $user->password)) {
+            return back()->with('errorpass', 'Please Enter New Password, it is Your Old Password.');
+        }
+        if (!Hash::check($req->current_password, $user->password)) {
+            return back()->with('incorrect', 'Current password is incorrect');
+        }
+        else{
+            $user->password = Hash::make($req->confirm_password);
+            $user->save();
+        }
+        return redirect('profile')->with('success', 'Password Changed Successfully!');
+    }
 }

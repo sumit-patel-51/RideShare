@@ -25,6 +25,8 @@ Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth');
 Route::get('/profile',[ProfileController::class, 'userProfile'])->middleware('auth')->name('profile');
 Route::get('/showEdit',[ProfileController::class, 'showEdit'])->middleware('auth')->name('showEdit');
 Route::put('/updateProfile/{id}',[ProfileController::class, 'update'])->middleware('auth')->name('updateProfile');
+Route::get('/showChangePass',[ProfileController::class, 'showChangePassword'])->middleware('auth')->name('showChangePass');
+Route::put('/savePassword',[ProfileController::class, 'savePassword'])->middleware('auth')->name('savePassword');
 
 
 //dashboard
@@ -43,9 +45,11 @@ Route::get('/ride/{ride}/passengers', [RideController::class, 'passengers'])->mi
 Route::get('/ride/{ride}/edit', [RideController::class, 'edit'])->middleware('auth')->name('ride.edit');
 Route::put('/ride/{ride}/', [RideController::class, 'update'])->middleware('auth')->name('ride.update');
 Route::put('/ride/completed/{ride}', [RideController::class, 'completeRide'])->middleware('auth')->name('ride.completed');
+Route::put('/ride/ongoing/{ride}', [RideController::class, 'ongoingRide'])->middleware('auth')->name('ride.ongoing');
 Route::post('/ride/{ride}/cancel', [RideController::class, 'cancelRide'])->middleware('auth')->name('ride.cancelRide');
 
 //book ride
+Route::get('/rides/detailShow/{id}', [RideController::class, 'rideDetailShow'])->middleware('auth')->name('rides.detailShow');
 Route::post('/book/{ride}', [RideController::class, 'book'])->middleware('auth')->name('rides.book');
 
 //my-booking

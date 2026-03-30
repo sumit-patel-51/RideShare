@@ -91,11 +91,11 @@
             <div class="row">
                 <div class="col-md-6 mb-3">
                     <label class="form-label">Vehicle Number</label>
-                    <input type="text" name="vehicle_number" class="form-control" placeholder="AB51 52 1234" required>
+                    <input type="text" name="vehicle_number" value="{{ $user->vehicle_no }}" class="form-control" placeholder="AB51 52 1234" required>
                 </div>
                 <div class="col-md-6 mb-3">
                     <label class="form-label">License Number</label>
-                    <input type="text" name="license_number" class="form-control" placeholder="Full License ID" required>
+                    <input type="text" name="license_number" value="{{ $user->license_no }}" class="form-control" placeholder="Full License ID" required>
                 </div>
             </div>
 

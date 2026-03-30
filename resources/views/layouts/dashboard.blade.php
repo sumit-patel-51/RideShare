@@ -19,7 +19,7 @@
         .navbar {
             background-color: #ffffff !important;
             border-bottom: 2px solid #000000;
-            padding: 15px 0;
+            padding: 10px 0;
             width: 100%;
             z-index: 100000;
             position: sticky;
@@ -42,6 +42,11 @@
             background-color: #ffffff;
             border-right: 2px solid #000000;
             padding-top: 2rem;
+            z-index: 10000;
+            position: sticky;
+            top: 73px;
+            height: 100vh;
+            overflow-y: auto;
         }
 
         .nav-link {
@@ -149,12 +154,12 @@
             </div>
         @endif
 
-        @if(session('error') || $errors->any())
+        @if(session('error'))
             <div class="alert-pop"
                 style="background-color: #ff4343; border: 3px solid #000; padding: 20px; box-shadow: 8px 8px 0px 0px rgba(0,0,0,1); border-radius: 0; text-align: center;">
                 <h4 style="font-weight: 900; text-transform: uppercase; margin-bottom: 5px; color: #fff;">Error</h4>
                 <p style="font-weight: 700; margin: 0; color: #fff;">
-                    {{ session('error') ?? $errors->first() }}
+                    {{ session('error') }}
                 </p>
             </div>
         @endif
@@ -192,11 +197,17 @@
                         @endif
                         <h6 class="fw-black mb-0">{{ auth()->user()->name }}</h6>
                     </a>
-                    <small class="text-muted fw-bold" style="font-size: 10px; text-transform: uppercase;">Verified
-                        Member</small><br>
+
                     @php
                         $avgRating = App\Models\Rating::where('given_to', auth()->id())->avg('rating');
+                        $verified = auth()->user()->license_no;
                     @endphp
+                    @if ($verified)
+                        <small class="text-muted fw-bold" style="font-size: 10px; text-transform: uppercase;">Verified
+                            Member</small><br>
+                    @else
+                        <small></small>
+                    @endif
                     <span class="text-muted small">⭐ {{ round($avgRating, 1) ?? 'N/A' }} Rating</span>
                 </div>
 
@@ -221,7 +232,7 @@
                 </div>
             </div>
 
-            <div class="col-lg-9 col-xl-10 p-4 bg-light bg-opacity-10">
+            <div class="col-lg-9 col-xl-10 bg-light bg-opacity-10">
                 <div class="py-2">
                     @yield('content')
                 </div>

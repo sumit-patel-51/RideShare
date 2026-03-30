@@ -7,10 +7,10 @@
             <span class="badge bg-dark rounded-pill px-3">{{ $bookings->where("status", 'Confirmed')->count() }}
                 active</span>
         </div>
-        @if($bookings->where("status", 'Confirmed')->count() > 0)
+        @if($bookings->where("status", 'Confirmed')->count() > 0 || $bookings->where("status", 'Ongoing')->count() > 0)
             <div class="row g-4">
                 @foreach($bookings as $booking)
-                    @if ($booking->status == 'Confirmed')
+                    @if ($booking->status == 'Confirmed' || $booking->status == 'Ongoing')
                     <div class="col-12 col-md-6">
                         <div class="card border-2 border-dark rounded-4 shadow-sm h-100 bg-white">
                             <div class="card-body p-4">
@@ -72,7 +72,7 @@
         @if($bookings->count() > 0)
             <div class="row g-4">
                 @foreach($bookings as $booking)
-                    @if ($booking->status != 'Confirmed')
+                    @if ($booking->status != 'Confirmed' && $booking->status != 'Ongoing')
                     <div class="col-12 col-md-6">
                         <div class="card border-2 border-dark rounded-4 shadow-sm h-100 bg-white">
                             <div class="card-body p-4">
