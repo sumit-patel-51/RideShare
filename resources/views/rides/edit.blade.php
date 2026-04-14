@@ -47,7 +47,7 @@
     }
 </style>
 
-<div class="container py-4">
+<div class="container py-3">
     <div class="card edit-ride-card p-4 p-md-5 mx-auto" style="max-width: 700px;">
         <div class="d-flex align-items-center mb-4">
             <a href="{{ route('rides.my') }}" class="btn btn-outline-dark rounded-circle me-3" style="width: 40px; height: 40px; border-width: 2px;">←</a>

@@ -45,7 +45,7 @@
         }
     </style>
 
-    <div class="container py-4">
+    <div class="container py-2">
         <div class="d-flex align-items-center mb-4">
             <a href="{{ route('profile') }}" class="btn btn-outline-dark rounded-circle me-3"
                 style="width: 40px; height: 40px;">←</a>

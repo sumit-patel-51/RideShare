@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\ProfileUpdateRequest;
 use App\Models\Rating;
 use App\Models\User;
 use File;
@@ -16,6 +15,7 @@ use Illuminate\View\View;
 class ProfileController extends Controller
 {
 
+    //show user profile page
     public function userProfile()
     {
         $user = auth()->user();
@@ -24,18 +24,15 @@ class ProfileController extends Controller
         $avgRating = Rating::where('given_to', $user->id)->avg('rating');
         return view('profile.profile', compact('user', 'avgRating', 'totalRating', 'rating'));
     }
-    /**
-     * Display the user's profile form.
-     */
+
+    // Display the user's profile form.
     public function showEdit()
     {
         $user = auth()->user();
         return view('profile.edit', compact('user'));
     }
 
-    /**
-     * Update the user's profile information.
-     */
+    //Update the user's profile information.
     public function update(Request $req, $id)
     {
         if (auth()->user()->id != $id) {
@@ -51,6 +48,11 @@ class ProfileController extends Controller
             'phone' => 'required',
         ]);
 
+        //delete old image
+        if($req->file('image') && $user->image && File::exists(public_path('userImages/'.$user->image))){
+            File::delete(public_path('userImages/'.$user->image));
+        }
+
         //image
         $file = $req->file('image');
         $imageName = '';
@@ -61,18 +63,12 @@ class ProfileController extends Controller
             $imageName = $user->image;
         }
 
-        //license and vehicle no
-        if (!$req->license_no)
-            $req->license_no = "";
-        if (!$req->vehicle_no)
-            $req->vehicle_no = "";
-
         $user->update([
             'name' => $req->name,
             'email' => $req->email,
             'phone' => $req->phone,
-            'license_no' => $req->license_no,
-            'vehicle_no' => $req->vehicle_no,
+            'license_no' => $req->license_no ? $req->license_no : "",
+            'vehicle_no' => $req->vehicle_no ? $req->vehicle_no : "",
             'image' => $imageName
         ]);
 
@@ -112,5 +108,45 @@ class ProfileController extends Controller
             $user->save();
         }
         return redirect('profile')->with('success', 'Password Changed Successfully!');
+    }
+
+    //delete user page show
+
+    public function showDeleteUser(){
+        return view('profile.deleteUser');
+    }
+    //delete user logic
+    public function deleteUser(Request $req){
+        $req->validate([
+            'email_confirmation' => 'required',
+            'password' =>'required',
+        ]);
+
+        //if email and password is not match
+        if(auth()->user()->email != $req->email_confirmation){
+            return back()->withErrors(['email_confirmation'=>'Email is Invalide, Please Enter Confirm Your Email.'])->withInput();
+        }
+        if(!Hash::check($req->password, auth()->user()->password)){
+            return back()->withErrors(['password'=>'Password is Invalide, Please Enter Currect password.'])->withInput();
+        }
+
+        $user = auth()->user();
+        $user->with('rides', 'bookings');
+        //Cancelled All Rides and passanger booking
+        foreach($user->rides as $ride){
+            $ride->update(['status' => 'Cancelled']);
+            foreach($ride->bookings as $booking){
+                $booking->update(['status' => 'Cancelled']);
+            }
+        }        
+
+        //Canceling booking of ride
+        foreach($user->bookings as $booking){
+            $booking->update(['status' => 'Cancelled']);
+        }    
+
+        //deleting user account
+        User::destroy($user->id);
+        return redirect('/')->with('success', 'User Account Deleted Successfully!');
     }
 }

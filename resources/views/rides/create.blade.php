@@ -49,7 +49,7 @@
     }
 </style>
 
-<div class="container py-4">
+<div class="container py-3">
     <div class="card post-ride-card p-4 p-md-5">
         <h3 class="fw-black mb-5">Create a New Ride</h3>
 

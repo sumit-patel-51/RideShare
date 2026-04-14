@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Auth\AuthController;
+use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RatingController;
 use App\Http\Controllers\RideController;
@@ -19,47 +20,62 @@ Route::post('/register', [AuthController::class, 'saveRegister']);
 
 Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
 Route::post('/login', [AuthController::class, 'saveLogin']);
-Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth');
 
-//profile page
-Route::get('/profile',[ProfileController::class, 'userProfile'])->middleware('auth')->name('profile');
-Route::get('/showEdit',[ProfileController::class, 'showEdit'])->middleware('auth')->name('showEdit');
-Route::put('/updateProfile/{id}',[ProfileController::class, 'update'])->middleware('auth')->name('updateProfile');
-Route::get('/showChangePass',[ProfileController::class, 'showChangePassword'])->middleware('auth')->name('showChangePass');
-Route::put('/savePassword',[ProfileController::class, 'savePassword'])->middleware('auth')->name('savePassword');
+//forgot password
+Route::get('/forgot-password', [ForgotPasswordController::class, 'showLinkRequestForm'])->name('Auth.forgot-password');
+Route::post('/forgot-password', [ForgotPasswordController::class, 'sendResetLinkEmail'])->name('password.email');
+Route::get('/reset-password/{token}', [ForgotPasswordController::class, 'showResetForm'])->name('password.reset');
+Route::post('/reset-password', [ForgotPasswordController::class, 'reset'])->name('password.update');
 
+Route::middleware(['auth'])->group(function () {
+    //logout
+    Route::post('/logout', [AuthController::class, 'logout']);
 
-//dashboard
-Route::get('/dashboard', [DashboardController::class, 'index'])
-    ->middleware('auth')
-    ->name('dashboard');
-
-
-//My ride posted
-Route::get('/my-rides', [RideController::class, 'myRides'])->middleware('auth')->name('rides.my');
-
-//post rides
-Route::get('/rides/create', [RideController::class, 'create'])->middleware('auth')->name('rides.create');
-Route::post('/rides', [RideController::class, 'store'])->middleware('auth')->name('rides.store');
-Route::get('/ride/{ride}/passengers', [RideController::class, 'passengers'])->middleware('auth')->name('ride.passengers');
-Route::get('/ride/{ride}/edit', [RideController::class, 'edit'])->middleware('auth')->name('ride.edit');
-Route::put('/ride/{ride}/', [RideController::class, 'update'])->middleware('auth')->name('ride.update');
-Route::put('/ride/completed/{ride}', [RideController::class, 'completeRide'])->middleware('auth')->name('ride.completed');
-Route::put('/ride/ongoing/{ride}', [RideController::class, 'ongoingRide'])->middleware('auth')->name('ride.ongoing');
-Route::post('/ride/{ride}/cancel', [RideController::class, 'cancelRide'])->middleware('auth')->name('ride.cancelRide');
-
-//book ride
-Route::get('/rides/detailShow/{id}', [RideController::class, 'rideDetailShow'])->middleware('auth')->name('rides.detailShow');
-Route::post('/book/{ride}', [RideController::class, 'book'])->middleware('auth')->name('rides.book');
-
-//my-booking
-Route::get('my-bookings', [RideController::class,'myBookings'])->middleware('auth')->name('rides.bookings');
-Route::get('/booking/details/{id}', [RideController::class,'showDetail'])->middleware('auth')->name('booking.details');
-Route::post('booking/cancel/{booking}', [RideController::class,'cancelBooking'])->middleware('auth')->name('booking.cancel');
+    //profile page
+    Route::get('/profile', [ProfileController::class, 'userProfile'])->name('profile');
+    Route::get('/showEdit', [ProfileController::class, 'showEdit'])->name('showEdit');
+    Route::put('/updateProfile/{id}', [ProfileController::class, 'update'])->name('updateProfile');
+    Route::get('/showChangePass', [ProfileController::class, 'showChangePassword'])->name('showChangePass');
+    Route::put('/savePassword', [ProfileController::class, 'savePassword'])->name('savePassword');
+    Route::get('/deleteUser', [ProfileController::class, 'showDeleteUser'])->name('deleteUser');
+    Route::delete('/deleteUser', [ProfileController::class, 'deleteUser'])->name('deleteUser');
 
 
-//driver profile
-Route::get('/profile/{id}', [RatingController::class, 'profileShow'])->middleware('auth')->name('profile.show');
+    //dashboard
+    Route::get('/dashboard', [DashboardController::class, 'index'])
 
-//rating
-Route::post('/ride/{ride}/rate',[RatingController::class, 'store'])->middleware('auth')->name('ride.rate');
+        ->name('dashboard');
+
+    //Main User Information dashboard
+    Route::get('/mainDashboard', [DashboardController::class, 'mainDashboardInfo'])->named('mainDashboard');
+
+
+    //My ride posted
+    Route::get('/my-rides', [RideController::class, 'myRides'])->name('rides.my');
+
+    //post rides
+    Route::get('/rides/create', [RideController::class, 'create'])->name('rides.create');
+    Route::post('/rides', [RideController::class, 'store'])->name('rides.store');
+    Route::get('/ride/{ride}/passengers', [RideController::class, 'passengers'])->name('ride.passengers');
+    Route::get('/ride/{ride}/edit', [RideController::class, 'edit'])->name('ride.edit');
+    Route::put('/ride/{ride}/', [RideController::class, 'update'])->name('ride.update');
+    Route::put('/ride/completed/{ride}', [RideController::class, 'completeRide'])->name('ride.completed');
+    Route::put('/ride/ongoing/{ride}', [RideController::class, 'ongoingRide'])->name('ride.ongoing');
+    Route::post('/ride/{ride}/cancel', [RideController::class, 'cancelRide'])->name('ride.cancelRide');
+
+    //book ride
+    Route::get('/rides/detailShow/{id}', [RideController::class, 'rideDetailShow'])->name('rides.detailShow');
+    Route::post('/book/{ride}', [RideController::class, 'book'])->name('rides.book');
+
+    //my-booking
+    Route::get('my-bookings', [RideController::class, 'myBookings'])->name('rides.bookings');
+    Route::get('/booking/details/{id}', [RideController::class, 'showDetail'])->name('booking.details');
+    Route::post('booking/cancel/{booking}', [RideController::class, 'cancelBooking'])->name('booking.cancel');
+
+
+    //driver profile
+    Route::get('/profile/{id}', [RatingController::class, 'profileShow'])->name('profile.show');
+
+    //rating
+    Route::post('/ride/{ride}/rate', [RatingController::class, 'store'])->name('ride.rate');
+});

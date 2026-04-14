@@ -149,7 +149,7 @@
                     </p>
                     <div class="d-flex gap-3 flex-wrap">
                         <a href="/dashboard" class="btn btn-main">Find a Ride</a>
-                        <a href="/rides/create" class="btn btn-outline-custom">Share Your Car</a>
+                        <a href="/rides/create" class="btn btn-outline-custom">Share Your Ride</a>
                     </div>
                 </div>
                 <div class="col-lg-6 d-none d-lg-block text-center">

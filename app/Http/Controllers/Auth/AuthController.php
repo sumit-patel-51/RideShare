@@ -28,6 +28,9 @@ class AuthController extends Controller
             'name' => $request->name,
             'email' => $request->email,
             'phone' => $request->phone,
+            'image' => '',
+            'license_no'=>'',
+            'vehicle_no'=>'',
             'password' => Hash::make($request->password),
         ]);
 
@@ -46,6 +49,14 @@ class AuthController extends Controller
             'password' => 'required',
         ]);
 
+        $emailFound = User::where('email',$request->email)->count();
+        if($emailFound == 0){
+            return back()->with('error', 'Email Not Found Please Register!');
+        }
+        if(!Auth::attempt(['email'=>$request->email,'password'=>$request->password])){
+            return back()->with('error', 'Invalid Password!');
+        }
+
         if (Auth::attempt(['email'=>$request->email,'password'=> $request->password])) {
             return redirect('/dashboard')->with('success', 'Login Succesfully!');
         }
@@ -54,6 +65,6 @@ class AuthController extends Controller
 
     public function logout(){
         Auth::logout();
-        return redirect('/login');
+        return redirect('/');
     }
 }

@@ -100,7 +100,7 @@
                 <div class="row">
                     <div class="col-md-12 mb-3">
                         <label class="form-label">Full Name</label>
-                        <input type="text" name="name" class="form-control" placeholder="John Doe" required>
+                        <input type="text" name="name" class="form-control" placeholder="Hamja Ali" required>
                     </div>
                 </div>
 
@@ -111,7 +111,7 @@
 
                 <div class="mb-3">
                     <label class="form-label">Phone Number</label>
-                    <input type="text" name="phone" class="form-control" placeholder="+1 234 567 890">
+                    <input type="text" name="phone" class="form-control" placeholder="+91 12345 67890">
                 </div>
 
                 <div class="mb-4">

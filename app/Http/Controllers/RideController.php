@@ -73,7 +73,7 @@ class RideController extends Controller
             return back()->with('error', 'Unauthorized access');
         }
 
-        $bookings = $ride->bookings()->where("status", 'Confirmed')->get();
+        $bookings = $ride->bookings()->whereIn("status", ['Confirmed' ,'Ongoing'])->get();
         return view('rides.passengers', compact('ride', 'bookings'));
     }
 
@@ -144,11 +144,15 @@ class RideController extends Controller
         }
         return back()->with("success", "Ride Completed!");
     }
-    //complete ride
+    //Ongoing ride
     public function ongoingRide(Ride $ride)
     {
         if ($ride->user_id != auth()->id())
             return back()->with('error', 'Unautharized');
+
+        if($ride->status == 'Ongoing'){
+            return back()->with('error', 'Ride Already Started!');
+        }
 
         $ride->update(['status' => 'Ongoing']);
 
@@ -168,7 +172,7 @@ class RideController extends Controller
         if ($ride->user_id == auth()->id()) {
             return back()->with('error', "You Can't Book Your Own Ride.");
         }
-        $avgRating = Rating::where('given_to', $id)->avg('rating');
+        $avgRating = Rating::where('given_to', $ride->user_id)->avg('rating');
         return view('rides.showDetail', compact('ride', 'avgRating'));
     }
     //book ride
@@ -179,6 +183,11 @@ class RideController extends Controller
             'drop_address' => 'required|string|max:255',
             'seats_booked' => 'required|integer|min:1'
         ]);
+
+        //return if ride is completed and cancelled
+        if ($ride->status !== 'Upcoming') {
+            return back()->with('error', 'Ride not available.');
+        }
         //already booked user not book again
         $alreadyBooked = Booking::where('ride_id', $ride->id)->where('status', 'Confirmed')->where('user_id', auth()->id())->exists();
         if ($alreadyBooked)

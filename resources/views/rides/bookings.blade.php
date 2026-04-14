@@ -1,7 +1,7 @@
 @extends('layouts.dashboard')
 
 @section('content')
-    <div class="container py-4">
+    <div class="container py-3">
         <div class="d-flex justify-content-between align-items-center mb-4 pb-3 border-bottom border-2 border-dark">
             <h3 class="fw-bolder m-0">My Bookings</h3>
             <span class="badge bg-dark rounded-pill px-3">{{ $bookings->where("status", 'Confirmed')->count() }}
@@ -42,7 +42,7 @@
                                     class="d-flex justify-content-between align-items-center pt-3 border-top border-1 border-light">
                                     <div>
                                         <span class="text-muted small d-block">Fare</span>
-                                        <span class="h4 fw-black mb-0">₹{{ number_format($booking->ride->price, 2) }}</span>
+                                        <span class="h4 fw-black mb-0">₹{{ number_format($booking->ride->price * $booking->seats_booked, 2) }}</span>
                                     </div>
                                     <div>
                                     </div>

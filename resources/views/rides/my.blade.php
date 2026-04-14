@@ -1,7 +1,7 @@
 @extends('layouts.dashboard')
 
 @section('content')
-    <div class="container py-4">
+    <div class="container py-3">
         <div class="d-flex justify-content-between align-items-center mb-4 pb-3 border-bottom border-2 border-dark">
             <div>
                 <h3 class="fw-black m-0">My Posted Rides</h3>
@@ -13,7 +13,7 @@
             </a>
         </div>
 
-        @if($rides->where('status', 'Upcoming')->count() > 0 || $rides->where('status', 'Ongoing')->count() > 0)
+        @if($rides->whereIn('status', ['Upcoming', 'Ongoing'])->count() > 0)
             <div class="row g-4">
                 @foreach($rides as $ride)
                     @if($ride->status == 'Upcoming' || $ride->status == 'Ongoing')
@@ -58,7 +58,7 @@
                                                 <form action="{{ route('ride.cancelRide', $ride) }}" method="post" class="w-50">
                                                     @csrf
                                                     <button type="submit"
-                                                        class="btn btn-sm btn-danger w-100 fw-bold py-2">Cancel</button>
+                                                        class="btn btn-sm btn-danger w-100 fw-bold py-2"  onclick="return confirm('Are you sure to Cancelle Ride ?')">Cancel</button>
                                                 </form>
                                             </div>
                                             <div class="d-flex gap-2 mb-2">
@@ -66,7 +66,7 @@
                                                     @method('PUT')
                                                     @csrf
                                                     <button type="submit"
-                                                        class="btn btn-sm btn-primary w-100 fw-black py-2 text-uppercase shadow-sm">
+                                                        class="btn btn-sm btn-primary w-100 fw-black py-2 text-uppercase shadow-sm" onclick="return confirm('Are you sure to Start Ride ?')">
                                                         Ongoing
                                                     </button>
                                                 </form>
@@ -74,7 +74,7 @@
                                                     @method('PUT')
                                                     @csrf
                                                     <button type="submit"
-                                                        class="btn btn-sm btn-success w-100 fw-black py-2 text-uppercase shadow-sm">
+                                                        class="btn btn-sm btn-success w-100 fw-black py-2 text-uppercase shadow-sm" onclick="return confirm('Are you sure to Complete Ride ?')">
                                                         Complete
                                                     </button>
                                                 </form>

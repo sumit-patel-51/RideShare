@@ -15,6 +15,68 @@
             overflow-x: hidden;
         }
 
+        /* --- Page Loader --- */
+        #loader-wrapper {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #ffffff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 999999;
+            transition: opacity 0.5s ease, visibility 0.5s;
+        }
+
+        .loader-box {
+            width: 50px;
+            height: 50px;
+            background: #FF9F43;
+            border: 3px solid #000000;
+            box-shadow: 5px 5px 0px 0px #000000;
+            animation: loader-spin 1.2s infinite ease-in-out;
+            margin: 0 auto 15px;
+        }
+
+        @keyframes loader-spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            50% {
+                transform: rotate(180deg) scale(1.1);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        .loader-hidden {
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        /* --- Content Entrance Animation --- */
+        .fade-in-content {
+            animation: fadeIn 0.8s cubic-bezier(0.19, 1, 0.22, 1) forwards;
+            opacity: 0;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
         /* --- Navbar --- */
         .navbar {
             background-color: #ffffff !important;
@@ -59,26 +121,15 @@
             border: 1px solid transparent;
         }
 
-        .nav-link:hover {
-            background-color: #FF9F43;
-            border: 1px solid #000000;
-        }
-
+        .nav-link:hover,
         .nav-link.active {
-            background-color: #FF9F43;
-            border: 1px solid #000000;
-            box-shadow: 4px 4px 0px 0px rgba(0, 0, 0, 1);
-        }
-
-        .nav-link.active,
-        .nav-link:hover {
             background-color: #FF9F43 !important;
             border: 2px solid #000000 !important;
             box-shadow: 4px 4px 0px 0px rgba(0, 0, 0, 1);
             color: #000000 !important;
         }
 
-        /* --- Custom Professional Buttons --- */
+        /* --- Buttons --- */
         .btn-post {
             background-color: #FF9F43;
             color: #000000;
@@ -102,10 +153,11 @@
             border-radius: 10px;
         }
 
-        /* --- Mobile Overlay/Sidebar --- */
+        /* --- Mobile Overlay --- */
         @media (max-width: 991px) {
             .sidebar {
                 position: fixed;
+                top: 67px;
                 left: -280px;
                 width: 280px;
                 z-index: 1050;
@@ -126,7 +178,6 @@
             width: 100%;
             height: 100%;
             background: rgba(255, 159, 67, 0.2);
-            /* Tinted orange overlay */
             backdrop-filter: blur(4px);
             z-index: 1040;
         }
@@ -134,26 +185,26 @@
         .overlay.active {
             display: block;
         }
-
-        .profile-img {
-            border: 2px solid #000000;
-            padding: 3px;
-            background: #FF9F43;
-        }
     </style>
 </head>
 
 <body>
+    <div id="loader-wrapper">
+        <div class="text-center">
+            <div class="loader-box"></div>
+            <h6 class="fw-black text-uppercase tracking-widest">Loading...</h6>
+        </div>
+    </div>
+
     <div id="flash-container"
         style="position: fixed; top: 10%; left: 50%; transform: translate(-50%, -50%); z-index: 100001; width: 90%; max-width: 400px;">
         @if(session('success'))
             <div class="alert-pop"
-                style="background-color: #FF9F43; border: 3px solid #000; padding: 20px; box-shadow: 8px 8px 0px 0px rgba(0,0,0,1); border-radius: 0; text-align: center;">
+                style="background-color: #FF9F43; border: 3px solid #000; padding: 20px; box-shadow: 8px 8px 0px 0px rgba(0,0,0,1); text-align: center;">
                 <h4 style="font-weight: 900; text-transform: uppercase; margin-bottom: 5px;">Success!</h4>
                 <p style="font-weight: 700; margin: 0;">{{ session('success') }}</p>
             </div>
         @endif
-
         @if(session('error'))
             <div class="alert-pop"
                 style="background-color: #ff4343; border: 3px solid #000; padding: 20px; box-shadow: 8px 8px 0px 0px rgba(0,0,0,1); border-radius: 0; text-align: center;">
@@ -164,16 +215,15 @@
             </div>
         @endif
     </div>
-    <!--  -->
+
     <div class="overlay" id="overlay" onclick="closeSidebar()"></div>
+
     <nav class="navbar navbar-expand-lg">
         <div class="container-fluid px-4">
             <button class="btn d-lg-none me-2 border-2 border-dark" onclick="toggleSidebar()">
                 <span class="fw-bold">☰</span>
             </button>
-
             <a class="navbar-brand fs-3" href="/dashboard">RIDE<span class="orange-dot">.</span>SHARE</a>
-
             <div class="ms-auto">
                 <a href="/rides/create" class="btn btn-post text-uppercase small">Post Ride</a>
             </div>
@@ -190,36 +240,34 @@
                                 class="rounded-circle border border-3 border-dark mb-3"
                                 style="width: 80px; height: 80px; object-fit: cover;">
                         @else
-                            <div class="rounded-circle border bottom-3 border-dark d-flex align-items-center justify-content-center bg-light shadow-sm mx-auto"
+                            <div class="rounded-circle border border-3 border-dark d-flex align-items-center justify-content-center mx-auto"
                                 style="width: 80px; height: 80px; background-color: #FF9F43 !important;">
                                 <span class="fw-black display-6">{{ substr(auth()->user()->name, 0, 1) }}</span>
                             </div>
                         @endif
                         <h6 class="fw-black mb-0">{{ auth()->user()->name }}</h6>
                     </a>
-
-                    @php
-                        $avgRating = App\Models\Rating::where('given_to', auth()->id())->avg('rating');
-                        $verified = auth()->user()->license_no;
-                    @endphp
-                    @if ($verified)
-                        <small class="text-muted fw-bold" style="font-size: 10px; text-transform: uppercase;">Verified
-                            Member</small><br>
-                    @else
-                        <small></small>
-                    @endif
-                    <span class="text-muted small">⭐ {{ round($avgRating, 1) ?? 'N/A' }} Rating</span>
+                    <span class="text-muted small">⭐
+                        {{ round(App\Models\Rating::where('given_to', auth()->id())->avg('rating'), 1) ?? 'N/A' }}
+                        Rating</span>
                 </div>
 
                 <ul class="nav flex-column px-2">
-                    <li class="nav-item {{ Request::is('dashboard') ? 'active' : '' }}">
-                        <a href="/dashboard" class="nav-link active">Dashboard</a>
+                    <li class="nav-item">
+                        <a href="/mainDashboard"
+                            class="nav-link {{ Request::is('mainDashboard') ? 'active' : '' }}">Dashboard</a>
                     </li>
-                    <li class="nav-item {{ Request::is('rides/my*') ? 'active' : '' }}">
-                        <a href="{{ route('rides.my') }}" class="nav-link">My Rides</a>
+                    <li class="nav-item">
+                    <li class="nav-item">
+                        <a href="/dashboard" class="nav-link {{ Request::is('dashboard') ? 'active' : '' }}">Search
+                            Ride</a>
                     </li>
-                    <li class="nav-item {{ Request::is('rides/bookings*') ? 'active' : '' }}">
-                        <a href="{{ route('rides.bookings') }}" class="nav-link">My Bookings</a>
+                    <li class="nav-item">
+                        <a href="/my-rides" class="nav-link {{ Request::is('my-rides') ? 'active' : '' }}">My Rides</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="my-bookings" class="nav-link {{ Request::is('my-bookings') ? 'active' : '' }}">My
+                            Bookings</a>
                     </li>
                 </ul>
 
@@ -232,8 +280,8 @@
                 </div>
             </div>
 
-            <div class="col-lg-9 col-xl-10 bg-light bg-opacity-10">
-                <div class="py-2">
+            <div class="col-lg-9 col-xl-10 bg-light bg-opacity-10 fade-in-content">
+                <div class="py-4 px-3">
                     @yield('content')
                 </div>
             </div>
@@ -241,22 +289,29 @@
     </div>
 
     <script>
-        window.onload = function () {
+        // Handle all loading logic when window is fully ready
+        window.addEventListener('load', function () {
+            // 1. Hide the Loader
+            const loader = document.getElementById('loader-wrapper');
+            loader.classList.add('loader-hidden');
+
+            // 2. Handle Flash Messages
             const flash = document.getElementById('flash-container');
             if (flash && flash.children.length > 0) {
-                // Wait 2 seconds, then fade out
                 setTimeout(() => {
                     flash.style.transition = "all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)";
                     flash.style.opacity = "0";
-                    flash.style.transform = "translate(-50%, -70%) scale(0.8)"; // Shrink and move up
+                    flash.style.transform = "translate(-50%, -70%) scale(0.8)";
                     setTimeout(() => flash.remove(), 400);
-                }, 2000);
+                }, 2500);
             }
-        };
+        });
+
         function toggleSidebar() {
             document.getElementById('sidebar').classList.toggle('active');
             document.getElementById('overlay').classList.toggle('active');
         }
+
         function closeSidebar() {
             document.getElementById('sidebar').classList.remove('active');
             document.getElementById('overlay').classList.remove('active');
