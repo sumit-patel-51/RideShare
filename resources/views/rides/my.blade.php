@@ -1,5 +1,7 @@
 @extends('layouts.dashboard')
 
+@section('title', 'My Rides')
+
 @section('content')
     <div class="container py-3">
         <div class="d-flex justify-content-between align-items-center mb-4 pb-3 border-bottom border-2 border-dark">
@@ -144,9 +146,9 @@
                             </div>
                         </div>
                     @else
-                        <div class="text-center py-5 border border-dashed rounded-5 mt-4">
+                        <!-- <div class="text-center py-5 border border-dashed rounded-5 mt-4">
                             <h5 class="text-secondary fw-bold">No Ride History</h5>
-                        </div>
+                        </div> -->
                     @endif
                 @endforeach
             </div>

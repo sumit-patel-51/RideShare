@@ -223,10 +223,10 @@
             <button class="btn d-lg-none me-2 border-2 border-dark" onclick="toggleSidebar()">
                 <span class="fw-bold">☰</span>
             </button>
-            <a class="navbar-brand fs-3" href="/dashboard">RIDE<span class="orange-dot">.</span>SHARE</a>
-            <div class="ms-auto">
+            <a class="navbar-brand fs-3" href="/admin/dashboard">RIDE<span class="orange-dot">.</span>SHARE</a>
+            <!-- <div class="ms-auto">
                 <a href="/rides/create" class="btn btn-post text-uppercase small">Post Ride</a>
-            </div>
+            </div> -->
         </div>
     </nav>
 
@@ -234,7 +234,7 @@
         <div class="row">
             <div class="col-lg-3 col-xl-2 sidebar" id="sidebar">
                 <div class="text-center mb-5">
-                    <a href="{{ url('profile') }}" class="text-black text-decoration-none">
+                    <a href="" class="text-black text-decoration-none">
                         @if (auth()->user()->image)
                             <img src="{{ asset('userImages/' . auth()->user()->image) }}"
                                 class="rounded-circle border border-3 border-dark mb-3"
@@ -245,29 +245,27 @@
                                 <span class="fw-black display-6">{{ substr(auth()->user()->name, 0, 1) }}</span>
                             </div>
                         @endif
-                        <h6 class="fw-black mb-0">{{ auth()->user()->name }}</h6>
+                        <h6 class="fw-black mt-2 mb-0">{{ auth()->user()->name }}</h6>
                     </a>
-                    <span class="text-muted small">⭐
-                        {{ round(App\Models\Rating::where('given_to', auth()->id())->avg('rating'), 1) ?? 'N/A' }}
-                        Rating</span>
                 </div>
 
                 <ul class="nav flex-column px-2">
                     <li class="nav-item">
-                        <a href="/mainDashboard"
-                            class="nav-link {{ Request::is('mainDashboard') ? 'active' : '' }}">Dashboard</a>
+                        <a href="/admin/dashboard"
+                            class="nav-link {{ Request::is('admin/dashboard') ? 'active' : '' }}">Dashboard</a>
                     </li>
                     <li class="nav-item">
                     <li class="nav-item">
-                        <a href="/dashboard" class="nav-link {{ Request::is('dashboard') ? 'active' : '' }}">Search
-                            Ride</a>
+                        <a href="/admin/users" class="nav-link {{ Request::is('admin/users') ? 'active' : '' }}">Users</a>
                     </li>
                     <li class="nav-item">
-                        <a href="/my-rides" class="nav-link {{ Request::is('my-rides') ? 'active' : '' }}">My Rides</a>
+                        <a href="/admin/rides" class="nav-link {{ Request::is('admin/rides') ? 'active' : '' }}">Rides</a>
                     </li>
                     <li class="nav-item">
-                        <a href="my-bookings" class="nav-link {{ Request::is('my-bookings') ? 'active' : '' }}">My
-                            Bookings</a>
+                        <a href="/admin/bookings" class="nav-link {{ Request::is('admin/bookings') ? 'active' : '' }}">Bookings</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="/admin/reviews" class="nav-link {{ Request::is('admin/reviews') ? 'active' : '' }}">Reviews</a>
                     </li>
                 </ul>
 

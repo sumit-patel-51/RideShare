@@ -1,5 +1,7 @@
 @extends('layouts.dashboard')
 
+@section('title', 'Booking Details')
+
 @section('content')
     <style>
         .booking-detail-card {

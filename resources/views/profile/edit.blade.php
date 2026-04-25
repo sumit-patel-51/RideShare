@@ -1,5 +1,8 @@
 @extends('layouts.dashboard')
 
+@section('title', 'Edit Profile')
+
+
 @section('content')
     <style>
         .edit-profile-card {

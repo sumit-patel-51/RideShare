@@ -1,5 +1,7 @@
 @extends('layouts.dashboard')
 
+@section('title', 'Search and Book Ride')
+
 @section('content')
 <style>
     /* Styling for the swap button on mobile */

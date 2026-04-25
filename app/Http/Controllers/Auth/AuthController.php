@@ -29,8 +29,8 @@ class AuthController extends Controller
             'email' => $request->email,
             'phone' => $request->phone,
             'image' => '',
-            'license_no'=>'',
-            'vehicle_no'=>'',
+            'license_no' => '',
+            'vehicle_no' => '',
             'password' => Hash::make($request->password),
         ]);
 
@@ -49,21 +49,32 @@ class AuthController extends Controller
             'password' => 'required',
         ]);
 
-        $emailFound = User::where('email',$request->email)->count();
-        if($emailFound == 0){
-            return back()->with('error', 'Email Not Found Please Register!');
+        $emailFound = User::where('email', $request->email)->count();
+        if ($emailFound == 0) {
+            return back()->with('error', 'Email Not Found Please Register!')->withInput();
         }
-        if(!Auth::attempt(['email'=>$request->email,'password'=>$request->password])){
+
+        if (!Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
             return back()->with('error', 'Invalid Password!');
         }
 
-        if (Auth::attempt(['email'=>$request->email,'password'=> $request->password])) {
+        //admin
+        if (auth()->user()->isAdmin()) {
+            return redirect()->route('admin.dashboard');
+        }
+
+        //user
+        if (Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
+            if (Auth::user()->status == 'inactive') {
+                return back()->with('error', "You Can'n Login, You Banned By Admin!");
+            }
             return redirect('/dashboard')->with('success', 'Login Succesfully!');
         }
         return back()->with('error', 'Invalid Credentials');
     }
 
-    public function logout(){
+    public function logout()
+    {
         Auth::logout();
         return redirect('/');
     }

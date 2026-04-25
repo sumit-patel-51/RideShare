@@ -1,5 +1,7 @@
 @extends('layouts.dashboard')
 
+@section('title', 'My Booking')
+
 @section('content')
     <div class="container py-3">
         <div class="d-flex justify-content-between align-items-center mb-4 pb-3 border-bottom border-2 border-dark">

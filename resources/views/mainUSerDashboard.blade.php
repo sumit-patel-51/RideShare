@@ -1,5 +1,7 @@
 @extends('layouts.dashboard')
 
+@section('title', 'Dashboard')
+
 @section('content')
     <style>
         .stat-card {

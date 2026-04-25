@@ -1,5 +1,7 @@
 @extends('layouts.dashboard')
 
+@section('title', 'Change Password')
+
 @section('content')
     <style>
         .password-card {

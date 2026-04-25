@@ -1,5 +1,7 @@
 @extends('layouts.dashboard')
 
+@section('title', 'Passenger List')
+
 @section('content')
 <style>
     /* Styling the route indicator for professional look */

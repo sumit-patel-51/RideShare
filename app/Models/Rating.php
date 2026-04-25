@@ -14,16 +14,23 @@ class Rating extends Model
         'review',
     ];
 
-    public function ratingsGiven() {
-        return $this-> hasMany(Ride::class,'givin_by');
+    public function ratingsGiven()
+    {
+        return $this->belongsTo(Ride::class, 'givin_by');
     }
 
-    public function ratingsReceived() {
-        return $this-> hasMany(Ride::class,'givin_to');
+    public function ratingsReceived()
+    {
+        return $this->belongsTo(Ride::class, 'givin_to');
     }
 
     public function giver()
     {
         return $this->belongsTo(User::class, 'given_by');
+    }
+
+    public function givenTo()
+    {
+        return $this->belongsTo(User::class, 'given_to');
     }
 }

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Http\Controllers\ProfileController;
@@ -27,6 +28,29 @@ Route::post('/forgot-password', [ForgotPasswordController::class, 'sendResetLink
 Route::get('/reset-password/{token}', [ForgotPasswordController::class, 'showResetForm'])->name('password.reset');
 Route::post('/reset-password', [ForgotPasswordController::class, 'reset'])->name('password.update');
 
+//Admin panel
+Route::middleware(['auth', 'admin'])->group(function () {
+    Route::get('/admin/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
+    //user
+    Route::get('/admin/users', [AdminController::class, 'index'])->name('admin.users');
+    Route::post('/users/{user}/toggle', [AdminController::class, 'toggleStatus'])->name('admin.users.toggle');
+
+    //rides
+    Route::get('/admin/rides', [AdminController::class, 'rides'])->name('admin.rides');
+    Route::get('/admin/rides/{ride}', [AdminController::class, 'show'])->name('admin.rides.show');
+    Route::post('/admin/rides/{ride}/cancel', [AdminController::class, 'cancel'])->name('admin.rides.cancel');
+    Route::get('/admin/userProfile/{id}', [AdminController::class, 'profileShow'])->name('admin.userProfile');
+
+    //booking
+    Route::get('/admin/bookings', [AdminController::class, 'indexBook'])->name('admin.bookings.indexBook');
+
+    //rating and review
+    Route::get('/admin/reviews', [AdminController::class, 'reviews'])->name('admin.reviews');
+    Route::delete('/admin/reviews/{review}', [AdminController::class, 'destroy'])->name('admin.reviews.delete');
+});
+
+
+//user panel
 Route::middleware(['auth'])->group(function () {
     //logout
     Route::post('/logout', [AuthController::class, 'logout']);

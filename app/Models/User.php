@@ -25,7 +25,8 @@ class User extends Authenticatable
         'password',
         'image',
         'license_no',
-        'vehicle_no'
+        'vehicle_no',
+        'role'
     ];
 
     /**
@@ -50,16 +51,38 @@ class User extends Authenticatable
         ];
     }
 
-    public function rides() {
+    //roles
+    const ROLE_USER = 1;
+    const ROLE_ADMIN = 2;
+
+    public function isAdmin()
+    {
+        return $this->role == self::ROLE_ADMIN;
+    }
+
+    public function isUser()
+    {
+        return $this->role == self::ROLE_USER;
+    }
+
+    
+    public function rides()
+    {
         return $this->hasMany(Ride::class);
     }
 
-    public function bookings(){
+    public function bookings()
+    {
         return $this->hasMany(Booking::class);
     }
 
     public function ratingsGiven()
     {
         return $this->hasMany(Rating::class, 'given_by');
+    }
+
+     public function givenTo()
+    {
+        return $this->hasMany(Rating::class, 'given_to');
     }
 }

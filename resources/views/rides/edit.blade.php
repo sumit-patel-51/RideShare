@@ -1,5 +1,7 @@
 @extends('layouts.dashboard')
 
+@section('title', 'Edit Ride')
+
 @section('content')
 <style>
     .edit-ride-card {

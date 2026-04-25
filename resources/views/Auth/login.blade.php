@@ -85,12 +85,12 @@
 
                 <div class="mb-3">
                     <label class="form-label">Email Address</label>
-                    <input type="email" name="email" value="{{ request('email') }}" class="form-control" placeholder="name@example.com">
+                    <input type="email" name="email" value="{{ Request('email') }}" class="form-control" placeholder="name@example.com">
                 </div>
 
                 <div class="mb-4">
                     <label class="form-label">Password</label>
-                    <input type="password" name="password" class="form-control" placeholder="••••••••">
+                    <input type="password" name="password" value="{{ Request('password') }}" class="form-control" placeholder="••••••••">
                     <!-- <a href="{{ route('Auth.forgot-password') }}">Forgot Your Password ?</a> -->
                 </div>
                 <button type="submit" class="btn btn-login w-100 mb-3">Login Now</button>
@@ -108,7 +108,7 @@
             @if (session('error'))
                 <div class="alert alert-dark border-2 border-black rounded-4 mt-3">
                     <ul class="mb-0 small fw-bold">
-                        <li>{{ session('error') }}</li>
+                        <li>{{ session('rror') }}</li>
                     </ul>
                 </div>
             @endif

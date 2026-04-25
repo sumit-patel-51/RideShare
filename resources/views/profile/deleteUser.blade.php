@@ -1,5 +1,7 @@
 @extends('layouts.dashboard')
 
+@section('title', 'Delete Profile')
+
 @section('content')
     <style>
         .danger-container {

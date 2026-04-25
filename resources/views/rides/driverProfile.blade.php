@@ -1,5 +1,7 @@
 @extends('layouts.dashboard')
 
+@section('title', 'Ride Driver Info')
+
 @section('content')
     <div class="container py-2 py-md-4">
         <div class="card border-2 border-dark rounded-4 shadow-sm mb-4 bg-white overflow-hidden">
